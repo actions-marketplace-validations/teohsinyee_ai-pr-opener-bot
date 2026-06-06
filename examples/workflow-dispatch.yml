@@ -1,0 +1,47 @@
+name: Create PR via AI PR Opener Bot
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: Source branch to open the pull request from
+        required: true
+        type: string
+      base:
+        description: Base branch to merge into
+        required: true
+        default: main
+        type: string
+      title:
+        description: Pull request title
+        required: true
+        type: string
+      body:
+        description: Pull request body in Markdown
+        required: false
+        default: ""
+        type: string
+      draft:
+        description: Open the pull request as a draft
+        required: true
+        default: true
+        type: boolean
+
+permissions:
+  contents: read
+
+jobs:
+  create-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Open pull request
+        uses: teohsinyee/ai-pr-opener-bot@main
+        with:
+          app_id: ${{ secrets.PR_APP_ID }}
+          private_key: ${{ secrets.PR_APP_PRIVATE_KEY }}
+          branch: ${{ github.event.inputs.branch }}
+          base: ${{ github.event.inputs.base }}
+          title: ${{ github.event.inputs.title }}
+          body: ${{ github.event.inputs.body }}
+          draft: ${{ github.event.inputs.draft }}
+          reviewer: teohsinyee
