@@ -25,12 +25,18 @@ You keep your personal account for review, approval, and merge.
 ## Quick Start
 
 1. Create or reuse your own GitHub App.
+   Your App should have:
+   - `Contents`: `Read and write`
+   - `Pull requests`: `Read and write`
+   - `Metadata`: `Read`
 2. Add your GitHub App credentials as repository secrets.
+   - `PR_APP_ID`
+   - `PR_APP_PRIVATE_KEY`
 3. Add a workflow that calls this action.
 4. Customize reviewer, PR title, draft setting, and branch logic for your repo.
 
-You do not install a hosted shared bot from this repository.
-This action is designed for developers who want to keep their own GitHub App identity and customize the workflow.
+This action uses your own GitHub App credentials.
+It is designed for developers who want to keep their own GitHub App identity and customize the workflow.
 
 Minimal example:
 
@@ -62,7 +68,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Open pull request
-        uses: teohsinyee/ai-pr-opener-bot@main
+        uses: teohsinyee/ai-pr-opener-bot@v1
         with:
           app_id: ${{ secrets.PR_APP_ID }}
           private_key: ${{ secrets.PR_APP_PRIVATE_KEY }}
@@ -77,10 +83,10 @@ Full example:
 
 - [examples/workflow-dispatch.yml](./examples/workflow-dispatch.yml)
 
-If you want a custom PR body, you can still pass the optional `body` input from your own workflow.
+By default, the example workflow requests review from the user who triggered the workflow.
+If you want a different reviewer, fill in the optional `reviewer` input.
 
-In the example workflow, `reviewer` is optional.
-If the user leaves it blank, the action requests review from the person who triggered the workflow.
+If you want a custom PR body, you can still pass the optional `body` input from your own workflow.
 
 ## What You Need
 
