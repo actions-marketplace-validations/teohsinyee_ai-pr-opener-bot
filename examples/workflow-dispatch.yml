@@ -16,8 +16,8 @@ on:
         description: Pull request title
         required: true
         type: string
-      body:
-        description: Pull request body in Markdown
+      reviewer:
+        description: Optional reviewer username. Defaults to the user who runs the workflow.
         required: false
         default: ""
         type: string
@@ -42,6 +42,5 @@ jobs:
           branch: ${{ github.event.inputs.branch }}
           base: ${{ github.event.inputs.base }}
           title: ${{ github.event.inputs.title }}
-          body: ${{ github.event.inputs.body }}
           draft: ${{ github.event.inputs.draft }}
-          reviewer: teohsinyee
+          reviewer: ${{ github.event.inputs.reviewer || github.actor }}

@@ -27,7 +27,7 @@ You keep your personal account for review, approval, and merge.
 1. Create or reuse your own GitHub App.
 2. Add your GitHub App credentials as repository secrets.
 3. Add a workflow that calls this action.
-4. Customize reviewer, PR title, body, and branch logic for your repo.
+4. Customize reviewer, PR title, draft setting, and branch logic for your repo.
 
 You do not install a hosted shared bot from this repository.
 This action is designed for developers who want to keep their own GitHub App identity and customize the workflow.
@@ -48,6 +48,11 @@ on:
         description: Pull request title
         required: true
         type: string
+      reviewer:
+        description: Optional reviewer username
+        required: false
+        default: ""
+        type: string
 
 permissions:
   contents: read
@@ -65,12 +70,17 @@ jobs:
           base: main
           title: ${{ github.event.inputs.title }}
           draft: true
-          reviewer: teohsinyee
+          reviewer: ${{ github.event.inputs.reviewer || github.actor }}
 ```
 
 Full example:
 
 - [examples/workflow-dispatch.yml](./examples/workflow-dispatch.yml)
+
+If you want a custom PR body, you can still pass the optional `body` input from your own workflow.
+
+In the example workflow, `reviewer` is optional.
+If the user leaves it blank, the action requests review from the person who triggered the workflow.
 
 ## What You Need
 
@@ -86,7 +96,7 @@ Full example:
 - `branch`: source branch
 - `base`: target branch, default `main`
 - `title`: pull request title
-- `body`: pull request body in Markdown
+- `body`: optional pull request body in Markdown
 - `draft`: `true` or `false`, default `true`
 - `reviewer`: optional GitHub username to request for review
 
